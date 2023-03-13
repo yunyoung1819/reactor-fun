@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 /**
  * 리액티브 타입 생성하기
  */
-public class FluxCreationTest {
+public class FluxCreationTests {
 	@Test
 	public void createAFlux_just() {
 		Flux<String> girlGroupsFlux = Flux
