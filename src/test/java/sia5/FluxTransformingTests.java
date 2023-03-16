@@ -1,10 +1,15 @@
 package sia5;
 
+import lombok.Data;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 리액티브 타입으로부터 데이터 필터링하기
@@ -92,4 +97,54 @@ public class FluxTransformingTests {
 				.expectNext("dog", "cat", "bird", "anteater")
 				.verifyComplete();
 	}
+
+	@Test
+	public void map() {
+		Flux<Player> playerFlux = Flux.just("Michael Jordan", "Scottie Pippen", "Steve Kerr")
+				.map(n -> {
+					String[] split = n.split("\\s");
+					return new Player(split[0], split[1]);
+				});
+
+		StepVerifier.create(playerFlux)
+				.expectNext(new Player("Michael", "Jordan"))
+				.expectNext(new Player("Scottie", "Pippen"))
+				.expectNext(new Player("Steve", "Kerr"))
+				.verifyComplete();
+	}
+
+	/**
+	 * flatMap() 오퍼레이션은 수행 도중 생성되는 임시 Flux를 사용해서 변환을 수행하므로
+	 * 비동기 변환이 가능하다
+	 */
+	@Test
+	public void flatMap() {
+		Flux<Player> playerFlux = Flux
+				.just("Michael Jordan", "Scottie Pippen", "Steve Kerr")
+				.flatMap(n -> Mono.just(n)
+						.map(p -> {
+							String[] split = p.split("\\s");
+							return new Player(split[0], split[1]);
+						})
+						.subscribeOn(Schedulers.parallel()));
+
+		List<Player> playerList = Arrays.asList(
+				new Player("Michael", "Jordan"),
+				new Player("Scottie", "Pippen"),
+				new Player("Steve", "Kerr"));
+
+		StepVerifier.create(playerFlux)
+				.expectNextMatches(p -> playerList.contains(p))
+				.expectNextMatches(p -> playerList.contains(p))
+				.expectNextMatches(p -> playerList.contains(p))
+				.verifyComplete();
+	}
+
+	@Data
+	private static class Player {
+		private final String firstName;
+		private final String lastName;
+	}
 }
+
+
