@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 리액티브 타입으로부터 데이터 필터링하기
+ * 리액티브 타입으로부터 데이터 필터링
  */
 public class FluxTransformingTests {
 
@@ -127,7 +127,6 @@ public class FluxTransformingTests {
 							return new Player(split[0], split[1]);
 						})
 						.subscribeOn(Schedulers.parallel()));
-
 		List<Player> playerList = Arrays.asList(
 				new Player("Michael", "Jordan"),
 				new Player("Scottie", "Pippen"),

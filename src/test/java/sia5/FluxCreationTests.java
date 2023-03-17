@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * 리액티브 타입 생성하기
+ * 리액티브 타입 생성
  */
 public class FluxCreationTests {
+
 	@Test
 	public void createAFlux_just() {
 		Flux<String> girlGroupsFlux = Flux
 				.just("Ive", "Lesserafim", "Newjeans", "G-IDLE", "ITZY", "BlackPink");
 		girlGroupsFlux.subscribe(f -> System.out.println("Here's some girl group: " + f));
-
 		StepVerifier.create(girlGroupsFlux)
 				.expectNext("Ive")
 				.expectNext("Lesserafim")

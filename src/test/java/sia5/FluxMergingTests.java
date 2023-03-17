@@ -8,11 +8,12 @@ import reactor.util.function.Tuple2;
 import java.time.Duration;
 
 /**
- * 리액티브 타입 조합하기
+ * 리액티브 타입 조합
  * 두 개의 리액티브 타입을 결합해야 하거나 하나의 Flux를 두 개 이상의 리액티브 타입으로 분할해야 하는 경우가 있을 수 있다.
  * 여기서는 리액터의 Flux나 Mono를 결합하거나 분할하는 오퍼레이션을 알아본다.
  */
 public class FluxMergingTests {
+
 	@Test
 	public void mergeFluxes() {
 		Flux<String> characterFlux = Flux
@@ -22,7 +23,6 @@ public class FluxMergingTests {
 				.just("Steak", "Grape", "Beer")
 				.delaySubscription(Duration.ofMillis(250))
 				.delayElements(Duration.ofMillis(500));
-
 		Flux<String> mergedFlux = characterFlux.mergeWith(foodFlux);
 
 		StepVerifier.create(mergedFlux)
@@ -75,7 +75,6 @@ public class FluxMergingTests {
 		Flux<String> slowFlux = Flux.just("tortoise", "snail", "sloth")
 				.delaySubscription(Duration.ofMillis(100));
 		Flux<String> fastFlux = Flux.just("hare", "cheetah", "squirrel");
-
 		Flux<String> firstFlux = Flux.first(slowFlux, fastFlux);
 
 		StepVerifier.create(firstFlux)

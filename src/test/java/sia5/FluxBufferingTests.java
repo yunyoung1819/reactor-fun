@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 리액티브 스트림 데이터의 버퍼링하기
+ * 리액티브 스트림 데이터의 버퍼링
  */
 public class FluxBufferingTests {
 
@@ -29,7 +29,7 @@ public class FluxBufferingTests {
 	}
 
 	@Test
-	public void bufferFlatMap() {
+	public void bufferAndFlatMap() {
 		Flux<String> fruitFlux = Flux.just("apple", "orange", "banana", "kiwi", "strawberry")
 				.buffer(3)
 				.flatMap(x ->
